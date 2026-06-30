@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+pandas
+openpyxl
+requests
+beautifulsoup4
+lxml
+playwright
+jinja2
+python-dotenv
+aiohttp
+aiosqlite
