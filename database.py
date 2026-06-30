@@ -6,7 +6,9 @@ from models import Base
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    connect_args={
+        "check_same_thread": False
+    },
     echo=False
 )
 
@@ -16,12 +18,20 @@ SessionLocal = sessionmaker(
     bind=engine
 )
 
-Base.metadata.create_all(bind=engine)
+
+def create_database():
+    Base.metadata.create_all(bind=engine)
+
+
+create_database()
 
 
 def get_db():
+
     db = SessionLocal()
+
     try:
         yield db
+
     finally:
         db.close()

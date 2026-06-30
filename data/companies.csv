@@ -1,0 +1,13 @@
+company_name,ats,career_url,remote,india,finance
+GitLab,Greenhouse,https://job-boards.greenhouse.io/gitlab,TRUE,TRUE,TRUE
+Remote,Greenhouse,https://job-boards.greenhouse.io/remotecom,TRUE,TRUE,TRUE
+ClickHouse,Greenhouse,https://job-boards.greenhouse.io/clickhouse,TRUE,TRUE,TRUE
+HashiCorp,Greenhouse,https://job-boards.greenhouse.io/hashicorp,TRUE,TRUE,TRUE
+Elastic,Greenhouse,https://jobs.elastic.co,TRUE,TRUE,TRUE
+Canonical,Workable,https://canonical.com/careers/all,TRUE,TRUE,TRUE
+Automattic,Workable,https://automattic.com/work-with-us,TRUE,TRUE,TRUE
+Hotjar,Workable,https://careers.hotjar.com,TRUE,TRUE,TRUE
+Deel,Ashby,https://jobs.ashbyhq.com/deel,TRUE,TRUE,TRUE
+OpenPhone,Ashby,https://jobs.ashbyhq.com/openphone,TRUE,TRUE,TRUE
+Vanta,Ashby,https://jobs.ashbyhq.com/vanta,TRUE,TRUE,TRUE
+PostHog,Ashby,https://jobs.ashbyhq.com/posthog,TRUE,TRUE,TRUE
