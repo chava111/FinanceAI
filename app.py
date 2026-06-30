@@ -1,37 +1,24 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-
-from database import get_db
-from models import Job
-
-from scrapers.engine import run_all_scrapers
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI(title="FinanceAI")
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
+
 
 @app.get("/")
-def home():
-    return {
-        "status": "running",
-        "message": "FinanceAI Started Successfully"
-    }
-
-
-@app.get("/jobs")
-def jobs(db: Session = Depends(get_db)):
-    jobs = db.query(Job).all()
-
-    return {
-        "count": len(jobs),
-        "jobs": jobs
-    }
-
-
-@app.get("/scrape")
-def scrape(db: Session = Depends(get_db)):
-
-    added = run_all_scrapers(db)
-
-    return {
-        "jobs_added": added
-    }
+async def dashboard(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "total_jobs": 0,
+            "remote_jobs": 0,
+            "companies": 0,
+            "today_jobs": 0,
+            "jobs": []
+        }
+    )
