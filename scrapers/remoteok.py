@@ -1,53 +1,67 @@
 import requests
-from models import Job
+import html
 
+from models import Job
 
 URL = "https://remoteok.com/api"
 
 
 def scrape_remoteok(db):
 
-    added = 0
+    total_added = 0
 
     headers = {
-        "User-Agent": "Mozilla/5.0"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
 
     try:
-        response = requests.get(URL, headers=headers, timeout=30)
+        response = requests.get(
+            URL,
+            headers=headers,
+            timeout=30
+        )
+
         response.raise_for_status()
 
-        data = response.json()
+        jobs = response.json()
 
     except Exception as e:
-        print(e)
+        print(f"RemoteOK Request Error : {e}")
         return 0
 
-    for item in data:
+    keywords = [
+        "finance",
+        "account",
+        "accountant",
+        "fp&a",
+        "financial",
+        "controller",
+        "audit",
+        "bookkeeper",
+        "treasury",
+        "payroll",
+        "tax"
+    ]
+
+    for item in jobs:
 
         if not isinstance(item, dict):
             continue
 
-        title = item.get("position", "")
+        title = html.unescape(
+            str(item.get("position", "")).strip()
+        )
 
         if title == "":
             continue
 
-        keywords = [
-            "finance",
-            "account",
-            "fp&a",
-            "controller",
-            "analyst",
-            "bookkeeper",
-            "audit",
-            "treasury"
-        ]
-
-        if not any(k in title.lower() for k in keywords):
+        if not any(word in title.lower() for word in keywords):
             continue
 
         url = item.get("url", "")
+
+        if url == "":
+            continue
 
         exists = db.query(Job).filter(Job.url == url).first()
 
@@ -55,22 +69,41 @@ def scrape_remoteok(db):
             continue
 
         job = Job(
+
             title=title,
-            company=item.get("company", ""),
-            location=item.get("location", "Remote"),
+
+            company=html.unescape(
+                str(item.get("company", ""))
+            ),
+
+            location=html.unescape(
+                str(item.get("location", "Remote"))
+            ),
+
             salary=str(item.get("salary", "")),
+
             source="RemoteOK",
+
             job_type="Remote",
+
             experience="",
+
             tags=",".join(item.get("tags", [])),
-            description=item.get("description", ""),
+
+            description=html.unescape(
+                str(item.get("description", ""))
+            ),
+
             url=url,
+
             posted=str(item.get("date", ""))
+
         )
 
         db.add(job)
-        added += 1
+
+        total_added += 1
 
     db.commit()
 
-    return added
+    return total_added
